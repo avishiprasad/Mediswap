@@ -4,18 +4,29 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import UploadMedicine from "./pages/UploadMedicine";
 import SearchMedicine from "./pages/SearchMedicine";
+import Footer from "./components/Footer";
+import "./App.css";
+import {useState} from 'react';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const renderPage = () => {
+    switch(currentPage) {
+      case 'home': return <Home setCurrentPage={setCurrentPage} />;
+      case 'signup': return <Signup />;
+      case 'upload': return <UploadMedicine />;
+      case 'search': return <SearchMedicine />;
+      default: return <Home setCurrentPage={setCurrentPage} />;
+    }
+  };
+
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/upload" element={<UploadMedicine />} />
-        <Route path="/search" element={<SearchMedicine />} />
-      </Routes>
-    </Router>
+    <div className="app">
+      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {renderPage()}
+      <Footer />
+    </div>
   );
 }
 
