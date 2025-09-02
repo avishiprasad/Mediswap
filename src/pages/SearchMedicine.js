@@ -1,29 +1,39 @@
 import "../App.css";
 import React, { useState } from 'react';
-import { HeartIcon, UploadIcon, SearchIcon, UsersIcon,MapPinIcon,StarIcon } from '../Icons';
-
+import { SearchIcon, MapPinIcon, UsersIcon, StarIcon } from '../Icons';
+import axios from 'axios';
 
 function SearchMedicine() {
-  const [searchResults] = useState([
-    {
-      id: 1,
-      name: 'Paracetamol 500mg',
-      quantity: 20,
-      expiry: '2025-12-15',
-      distance: '0.5 km',
-      donor: 'Sarah M.',
-      rating: 4.9
-    },
-    {
-      id: 2,
-      name: 'Amoxicillin 250mg',
-      quantity: 15,
-      expiry: '2025-08-22',
-      distance: '1.2 km',
-      donor: 'John D.',
-      rating: 5.0
+  const [formData, setFormData] = useState({
+    name: '',
+    location: '',
+    radius: 'Within 5 km'
+  });
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get('https://your-api-gateway-url/searchMedicine', {
+        params: {
+          name: formData.name,
+          location: formData.location,
+          radius: formData.radius
+        }
+      });
+
+      // Assuming API returns an array of medicines
+      setSearchResults(response.data);
+    } catch (err) {
+      console.error(err);
+      alert("Error fetching medicines. Try again.");
     }
-  ]);
+  };
 
   return (
     <div className="search-page">
@@ -37,13 +47,16 @@ function SearchMedicine() {
         </div>
 
         <div className="search-form-card">
-          <div className="search-form">
+          <form className="search-form" onSubmit={handleSearch}>
             <div className="form-group">
               <label>Medicine Name</label>
               <input 
                 type="text" 
+                name="name"
                 className="form-input"
                 placeholder="Search medicine..."
+                value={formData.name}
+                onChange={handleChange}
               />
             </div>
             
@@ -51,29 +64,38 @@ function SearchMedicine() {
               <label>Location</label>
               <input 
                 type="text" 
+                name="location"
                 className="form-input"
                 placeholder="Your location..."
+                value={formData.location}
+                onChange={handleChange}
               />
             </div>
             
             <div className="form-group">
               <label>Radius</label>
-              <select className="form-input">
+              <select 
+                name="radius" 
+                className="form-input"
+                value={formData.radius}
+                onChange={handleChange}
+              >
                 <option>Within 5 km</option>
                 <option>Within 10 km</option>
                 <option>Within 25 km</option>
               </select>
             </div>
-          </div>
-          
-          <button className="btn-primary search-btn">
-            <SearchIcon />
-            <span>Search Medicines</span>
-          </button>
+
+            <button type="submit" className="btn-primary search-btn">
+              <SearchIcon />
+              <span>Search Medicines</span>
+            </button>
+          </form>
         </div>
 
         <div className="search-results">
           <h3>Available Medicines</h3>
+          {searchResults.length === 0 && <p>No medicines found.</p>}
           {searchResults.map((medicine) => (
             <div key={medicine.id} className="medicine-card">
               <div className="medicine-info">
@@ -107,4 +129,5 @@ function SearchMedicine() {
     </div>
   );
 }
-  export default SearchMedicine;
+
+export default SearchMedicine;

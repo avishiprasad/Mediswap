@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../App.css";
-import React, { useState } from 'react';
+import React from 'react';
 import { HeartIcon, UploadIcon, SearchIcon, UsersIcon } from '../Icons';
 
-function Navbar({ currentPage, setCurrentPage }) {
+function Navbar() {
+  const links = [
+    { path: "/", label: "Home", icon: HeartIcon },
+    { path: "/signup", label: "Sign In", icon: UsersIcon },
+    { path: "/upload", label: "Donate", icon: UploadIcon },
+    { path: "/search", label: "Find Medicine", icon: SearchIcon }
+  ];
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -14,22 +21,17 @@ function Navbar({ currentPage, setCurrentPage }) {
             </div>
             <span className="logo-text">MediSwap</span>
           </div>
-          
+
           <div className="nav-links">
-            {[
-              { id: 'home', label: 'Home', icon: HeartIcon },
-              { id: 'signup', label: 'Sign In', icon: UsersIcon },
-              { id: 'upload', label: 'Donate', icon: UploadIcon },
-              { id: 'search', label: 'Find Medicine', icon: SearchIcon }
-            ].map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => setCurrentPage(id)}
-                className={`nav-link ${currentPage === id ? 'active' : ''}`}
+            {links.map(({ path, label, icon: Icon }) => (
+              <NavLink
+                key={path}
+                to={path}
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
               >
                 <Icon />
                 <span>{label}</span>
-              </button>
+              </NavLink>
             ))}
           </div>
         </div>
@@ -37,4 +39,5 @@ function Navbar({ currentPage, setCurrentPage }) {
     </nav>
   );
 }
+
 export default Navbar;

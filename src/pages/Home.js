@@ -1,9 +1,11 @@
 import "../App.css";
-import React, { useState } from 'react';
-import { HeartIcon, UploadIcon, SearchIcon, UsersIcon,MapPinIcon,ShieldIcon,ClockIcon,PillIcon } from '../Icons';
+import React from 'react';
+import { HeartIcon, UploadIcon, SearchIcon, UsersIcon, MapPinIcon, ShieldIcon, ClockIcon, PillIcon } from '../Icons';
+import { useNavigate } from 'react-router-dom';
 
+function Home() {
+  const navigate = useNavigate();
 
-function Home({ setCurrentPage }) {
   const stats = [
     { number: '10K+', label: 'Medicines Donated', icon: HeartIcon },
     { number: '5K+', label: 'Lives Helped', icon: UsersIcon },
@@ -54,14 +56,14 @@ function Home({ setCurrentPage }) {
             
             <div className="hero-buttons">
               <button 
-                onClick={() => setCurrentPage('upload')}
+                onClick={() => navigate('/upload')}
                 className="btn-primary"
               >
                 <UploadIcon />
                 <span>Donate Medicine</span>
               </button>
               <button 
-                onClick={() => setCurrentPage('search')}
+                onClick={() => navigate('/search')}
                 className="btn-secondary"
               >
                 <SearchIcon />
@@ -113,4 +115,5 @@ function Home({ setCurrentPage }) {
     </div>
   );
 }
-  export default Home;
+
+export default Home;

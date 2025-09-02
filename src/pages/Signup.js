@@ -1,10 +1,21 @@
 import "../App.css";
 import React, { useState } from 'react';
-import { HeartIcon, UploadIcon, SearchIcon, UsersIcon } from '../Icons';
-
+import { UsersIcon } from '../Icons';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate(); // For redirecting after login/signup
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Add your login/signup logic here
+    // For example, call your AWS Lambda signup/login API
+    console.log("Form submitted");
+
+    // Redirect to Home or Upload page after login/signup
+    navigate('/');
+  };
 
   return (
     <div className="auth-page">
@@ -18,7 +29,7 @@ function Signup() {
             <p>{isLogin ? 'Sign in to your account' : 'Create your account to start helping'}</p>
           </div>
 
-          <div className="auth-form">
+          <form className="auth-form" onSubmit={handleSubmit}>
             {!isLogin && (
               <div className="form-group">
                 <label>Full Name</label>
@@ -26,6 +37,7 @@ function Signup() {
                   type="text" 
                   className="form-input"
                   placeholder="Enter your full name"
+                  required
                 />
               </div>
             )}
@@ -36,6 +48,7 @@ function Signup() {
                 type="email" 
                 className="form-input"
                 placeholder="Enter your email"
+                required
               />
             </div>
             
@@ -45,6 +58,7 @@ function Signup() {
                 type="password" 
                 className="form-input"
                 placeholder="Enter your password"
+                required
               />
             </div>
 
@@ -55,19 +69,21 @@ function Signup() {
                   type="tel" 
                   className="form-input"
                   placeholder="Enter your phone number"
+                  required
                 />
               </div>
             )}
             
-            <button className="btn-primary full-width">
+            <button type="submit" className="btn-primary full-width">
               {isLogin ? 'Sign In' : 'Create Account'}
             </button>
-          </div>
+          </form>
 
           <div className="auth-toggle">
             <button 
               onClick={() => setIsLogin(!isLogin)}
               className="toggle-link"
+              type="button"
             >
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>
@@ -77,4 +93,5 @@ function Signup() {
     </div>
   );
 }
-  export default Signup;
+
+export default Signup;
